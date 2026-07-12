@@ -52,22 +52,26 @@ export default function Dashboard() {
 
   return (
     <div className="mx-auto max-w-7xl space-y-6">
-      <div className="flex flex-col gap-4 rounded-[32px] border border-[#D8C9A7]/70 bg-white p-6 shadow-sm dark:border-[#3B433D] dark:bg-[#242826] md:flex-row md:items-end md:justify-between">
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#6E8B3D]">
+      <div className="rounded-3xl border border-[#D8C9A7]/70 bg-white p-5 shadow-sm dark:border-[#3B433D] dark:bg-[#242826] sm:p-6">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-3xl">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
             Operations overview
           </p>
-          <h1 className="mt-2 text-3xl font-semibold">
-            Smart Transport Operations Platform
+          <h1 className="mt-2 text-2xl font-semibold leading-tight sm:text-3xl">
+            Dashboard
           </h1>
+          <p className="mt-2 text-sm leading-6 text-[#6B6B6B] dark:text-[#B4B4B4]">
+            Monitor fleet availability, active trips, fuel performance, and daily operations from one place.
+          </p>
         </div>
 
-        <div className="flex gap-3">
+          <div className="grid w-full gap-3 sm:grid-cols-2 lg:max-w-md">
           <select
             name="type"
             onChange={handleFilterChange}
             value={filters.type}
-            className="rounded-full border border-[#D8C9A7]/70 bg-[#F6F5F2] px-4 py-2 text-sm text-[#2A2A2A] outline-none dark:border-[#3B433D] dark:bg-[#1F2421] dark:text-[#F5F5F5]"
+              className="h-11 rounded-2xl border border-[#D8C9A7]/70 bg-[#F6F5F2] px-4 text-sm text-[#2A2A2A] outline-none dark:border-[#3B433D] dark:bg-[#1F2421] dark:text-[#F5F5F5]"
           >
             <option value="">All Types</option>
             <option value="Truck">Truck</option>
@@ -78,20 +82,23 @@ export default function Dashboard() {
             name="status"
             onChange={handleFilterChange}
             value={filters.status}
-            className="rounded-full border border-[#D8C9A7]/70 bg-[#F6F5F2] px-4 py-2 text-sm text-[#2A2A2A] outline-none dark:border-[#3B433D] dark:bg-[#1F2421] dark:text-[#F5F5F5]"
+              className="h-11 rounded-2xl border border-[#D8C9A7]/70 bg-[#F6F5F2] px-4 text-sm text-[#2A2A2A] outline-none dark:border-[#3B433D] dark:bg-[#1F2421] dark:text-[#F5F5F5]"
           >
             <option value="">All Statuses</option>
             <option value="Available">Available</option>
             <option value="On Trip">On Trip</option>
             <option value="In Shop">In Shop</option>
           </select>
+          </div>
         </div>
       </div>
 
       {loading ? (
-        <div className="py-8 text-center text-[#6B6B6B]">Loading metrics...</div>
+        <div className="rounded-2xl border border-[#D8C9A7]/70 bg-white py-10 text-center text-sm text-[#6B6B6B] shadow-sm dark:border-[#3B433D] dark:bg-[#242826] dark:text-[#B4B4B4]">
+          Loading metrics...
+        </div>
       ) : kpis ? (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid auto-rows-fr gap-4 sm:grid-cols-2 xl:grid-cols-4">
           <StatCard
             label="Active Vehicles"
             value={kpis.active_vehicles}
@@ -120,27 +127,33 @@ export default function Dashboard() {
             value={kpis.drivers_on_duty}
             hint="Active personnel"
           />
+          <StatCard
+            label="Dispatch Queue"
+            value={(kpis.active_trips || 0) + (kpis.pending_trips || 0)}
+            hint="Trips in motion"
+            accent
+          />
         </div>
       ) : null}
 
-      <div className="flex flex-wrap gap-3">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {['Add Vehicle', 'Assign Driver', 'Create Trip', 'Generate Report'].map((action) => (
           <button
             key={action}
-            className="rounded-full border border-[#D8C9A7] bg-white px-4 py-2 text-sm font-semibold text-[#2A2A2A] shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md dark:border-[#3B433D] dark:bg-[#1F2421] dark:text-[#F5F5F5]"
+            className="h-12 rounded-2xl border border-[#D8C9A7] bg-white px-4 text-sm font-semibold text-[#2A2A2A] shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--accent)] hover:shadow-md dark:border-[#3B433D] dark:bg-[#1F2421] dark:text-[#F5F5F5]"
           >
             {action}
           </button>
         ))}
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
+      <div className="grid items-stretch gap-6 xl:grid-cols-[1.25fr_0.75fr]">
         <ChartPlaceholder
           title="Fleet utilization"
           subtitle="Capacity versus active routes"
         />
 
-        <div className="card rounded-3xl border border-[#D8C9A7]/70 bg-white p-5 dark:border-[#3B433D] dark:bg-[#242826]">
+        <div className="card flex h-full min-h-[320px] flex-col p-5">
           <div className="mb-4">
             <h3 className="text-lg font-semibold">Fuel analytics</h3>
             <p className="text-sm text-[#6B6B6B] dark:text-[#B4B4B4]">
@@ -148,12 +161,12 @@ export default function Dashboard() {
             </p>
           </div>
 
-          <div className="space-y-3">
+          <div className="flex flex-1 flex-col gap-3">
             {fuelAnalytics.length > 0 ? (
               fuelAnalytics.map((vehicle) => (
                 <div
                   key={vehicle.registration_number}
-                  className="flex items-center justify-between rounded-2xl border border-[#D8C9A7]/60 bg-[#FCFAF7] px-4 py-3 dark:border-[#3B433D] dark:bg-[#1F2421]"
+                  className="flex min-h-[72px] items-center justify-between rounded-2xl border border-[#D8C9A7]/60 bg-[#FCFAF7] px-4 py-3 dark:border-[#3B433D] dark:bg-[#1F2421]"
                 >
                   <div>
                     <p className="font-semibold">{vehicle.registration_number}</p>
@@ -161,7 +174,7 @@ export default function Dashboard() {
                       Cost: ${vehicle.operational_cost.toFixed(2)}
                     </p>
                   </div>
-                  <p className="text-sm font-semibold text-[#6E8B3D]">
+                  <p className="text-sm font-semibold text-[var(--accent)]">
                     {vehicle.fuel_efficiency} km/L
                   </p>
                 </div>
@@ -173,8 +186,8 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
-        <div className="card p-5">
+      <div className="grid items-start gap-6 xl:grid-cols-2">
+        <div className="card min-h-[300px] p-5">
           <div className="mb-4 flex items-center justify-between">
             <div>
               <h3 className="text-lg font-semibold">Fleet status</h3>
@@ -184,13 +197,13 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="relative flex h-32 w-32 items-center justify-center rounded-full border-[10px] border-[#D8C9A7]/60">
+          <div className="flex flex-col items-center gap-5 sm:flex-row">
+            <div className="relative flex h-36 w-36 shrink-0 items-center justify-center rounded-full border-[10px] border-[#D8C9A7]/60">
               <div
                 className="absolute inset-0 rounded-full"
                 style={{
                   background:
-                    'conic-gradient(#6E8B3D 0 58%, #D8C9A7 58% 78%, #A7A7A7 78% 100%)',
+                    'conic-gradient(var(--accent) 0 58%, #D8C9A7 58% 78%, #A7A7A7 78% 100%)',
                 }}
               />
               <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-white text-sm font-semibold text-[#2A2A2A] dark:bg-[#242826] dark:text-[#F5F5F5]">
@@ -198,24 +211,33 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <div className="space-y-2 text-sm">
-              <div className="flex items-center gap-2">
-                <span className="h-2.5 w-2.5 rounded-full bg-[#6E8B3D]" />
+            <div className="grid w-full gap-3 text-sm">
+              <div className="flex items-center justify-between rounded-2xl bg-[#FCFAF7] px-4 py-3 dark:bg-[#1F2421]">
+                <span className="flex items-center gap-2">
+                <span className="h-2.5 w-2.5 rounded-full bg-[var(--accent)]" />
                 Active
+                </span>
+                <span className="font-semibold">58%</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center justify-between rounded-2xl bg-[#FCFAF7] px-4 py-3 dark:bg-[#1F2421]">
+                <span className="flex items-center gap-2">
                 <span className="h-2.5 w-2.5 rounded-full bg-[#D8C9A7]" />
                 Maintenance
+                </span>
+                <span className="font-semibold">20%</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center justify-between rounded-2xl bg-[#FCFAF7] px-4 py-3 dark:bg-[#1F2421]">
+                <span className="flex items-center gap-2">
                 <span className="h-2.5 w-2.5 rounded-full bg-[#A7A7A7]" />
                 Offline
+                </span>
+                <span className="font-semibold">22%</span>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="card p-5">
+        <div className="card min-h-[300px] p-5">
           <div className="mb-4 flex items-center justify-between">
             <div>
               <h3 className="text-lg font-semibold">Recent activity</h3>
@@ -225,7 +247,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="space-y-3">
+          <div className="grid gap-3 sm:grid-cols-2">
             {[
               { label: 'Vehicle assigned', detail: 'TR-204 assigned to Mina Chen' },
               { label: 'Driver checked in', detail: 'Aarav Patel checked in for Route 12' },
@@ -234,7 +256,7 @@ export default function Dashboard() {
             ].map((item) => (
               <div
                 key={item.label}
-                className="rounded-2xl border border-[#D8C9A7]/60 bg-[#FCFAF7] px-3 py-3 dark:border-[#3B433D] dark:bg-[#1F2421]"
+                className="min-h-[92px] rounded-2xl border border-[#D8C9A7]/60 bg-[#FCFAF7] px-3 py-3 dark:border-[#3B433D] dark:bg-[#1F2421]"
               >
                 <p className="font-semibold">{item.label}</p>
                 <p className="mt-1 text-sm text-[#6B6B6B] dark:text-[#B4B4B4]">
@@ -253,7 +275,7 @@ export default function Dashboard() {
                 Live dispatch snapshot
               </p>
             </div>
-            <button className="rounded-full bg-[#6E8B3D] px-3 py-2 text-sm font-semibold text-white">
+            <button className="rounded-full bg-[var(--accent)] px-3 py-2 text-sm font-semibold text-white">
               View all
             </button>
           </div>
@@ -282,7 +304,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="space-y-6">
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-1">
           <div className="card p-5">
             <div className="mb-4 flex items-center justify-between">
               <h3 className="text-lg font-semibold">Maintenance alerts</h3>
@@ -312,7 +334,7 @@ export default function Dashboard() {
           <div className="card p-5">
             <div className="mb-4 flex items-center justify-between">
               <h3 className="text-lg font-semibold">Driver status</h3>
-              <span className="text-sm text-[#6E8B3D]">18 active</span>
+              <span className="text-sm text-[var(--accent)]">18 active</span>
             </div>
 
             <div className="space-y-2">

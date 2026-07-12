@@ -1,9 +1,13 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -24,12 +28,8 @@ export default function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        // 1. Save the token and user details to localStorage
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        
-        // 2. Redirect to the Dashboard
-        window.location.href = '/'; 
+        login(data.user, data.token);
+        navigate('/', { replace: true });
       } else {
         setError(data.message || 'Login failed. Please check your credentials.');
       }
@@ -46,7 +46,7 @@ export default function Login() {
       <div className="w-full max-w-md rounded-[32px] border border-[#D8C9A7]/70 bg-white p-8 shadow-xl dark:border-[#3B433D] dark:bg-[#242826]">
         
         <div className="mb-8 text-center">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#6E8B3D]">Welcome Back</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">Welcome Back</p>
           <h1 className="mt-2 text-3xl font-bold text-[#2A2A2A] dark:text-[#F5F5F5]">TransitOps</h1>
           <p className="mt-2 text-sm text-[#6B6B6B] dark:text-[#B4B4B4]">Sign in to manage your fleet operations.</p>
         </div>
@@ -66,7 +66,7 @@ export default function Login() {
               required 
               value={formData.email} 
               onChange={handleInputChange} 
-              className="w-full rounded-xl border border-[#D8C9A7]/70 bg-[#F6F5F2] p-3 outline-none transition-colors focus:border-[#6E8B3D] dark:border-[#3B433D] dark:bg-[#1F2421] dark:text-[#F5F5F5]" 
+              className="w-full rounded-xl border border-[#D8C9A7]/70 bg-[#F6F5F2] p-3 outline-none transition-colors focus:border-[var(--accent)] dark:border-[#3B433D] dark:bg-[#1F2421] dark:text-[#F5F5F5]" 
               placeholder="admin@transitops.com"
             />
           </div>
@@ -79,7 +79,7 @@ export default function Login() {
               required 
               value={formData.password} 
               onChange={handleInputChange} 
-              className="w-full rounded-xl border border-[#D8C9A7]/70 bg-[#F6F5F2] p-3 outline-none transition-colors focus:border-[#6E8B3D] dark:border-[#3B433D] dark:bg-[#1F2421] dark:text-[#F5F5F5]" 
+              className="w-full rounded-xl border border-[#D8C9A7]/70 bg-[#F6F5F2] p-3 outline-none transition-colors focus:border-[var(--accent)] dark:border-[#3B433D] dark:bg-[#1F2421] dark:text-[#F5F5F5]" 
               placeholder="••••••••"
             />
           </div>
@@ -87,7 +87,7 @@ export default function Login() {
           <button 
             type="submit" 
             disabled={loading}
-            className="mt-4 w-full rounded-full bg-[#6E8B3D] py-3 text-sm font-semibold text-white transition-all hover:bg-[#5F7633] active:scale-[0.98] disabled:opacity-70"
+            className="mt-4 w-full rounded-full bg-[var(--accent)] py-3 text-sm font-semibold text-white transition-all hover:bg-[var(--accent-hover)] active:scale-[0.98] disabled:opacity-70"
           >
             {loading ? 'Authenticating...' : 'Sign In'}
           </button>

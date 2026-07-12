@@ -4,20 +4,29 @@ const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
-    const stored = localStorage.getItem('transitops-user');
-    return stored ? JSON.parse(stored) : null;
+    const stored = localStorage.getItem('user') || localStorage.getItem('transitops-user');
+    try {
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
   });
 
   useEffect(() => {
     if (user) {
-      localStorage.setItem('transitops-user', JSON.stringify(user));
+      localStorage.setItem('user', JSON.stringify(user));
     } else {
+      localStorage.removeItem('user');
       localStorage.removeItem('transitops-user');
+      localStorage.removeItem('token');
     }
   }, [user]);
 
-  const login = (email, password) => {
-    setUser({ email, password });
+  const login = (userData, token) => {
+    if (token) {
+      localStorage.setItem('token', token);
+    }
+    setUser(userData);
   };
 
   const logout = () => setUser(null);

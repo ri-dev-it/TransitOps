@@ -29,7 +29,7 @@ export default function Navbar({ sidebarOpen, onToggleSidebar }) {
             {sidebarOpen ? '☰' : '☰'}
           </button>
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#6E8B3D]">Operations</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">Operations</p>
             <p className="text-sm text-[#6B6B6B] dark:text-[#B4B4B4]">Welcome back, {user?.email || 'Operator'}</p>
           </div>
         </div>
@@ -82,7 +82,7 @@ export default function Navbar({ sidebarOpen, onToggleSidebar }) {
             <Link to="/settings" className="rounded-full border border-[#D8C9A7] bg-white px-3 py-2 text-sm font-medium text-[#2A2A2A] dark:border-[#3B433D] dark:bg-[#1F2421] dark:text-[#F5F5F5]">
               Settings
             </Link>
-            <button onClick={logout} className="rounded-full bg-[#6E8B3D] px-3 py-2 text-sm font-semibold text-white">
+            <button onClick={logout} className="rounded-full bg-[var(--accent)] px-3 py-2 text-sm font-semibold text-white">
               Logout
             </button>
           </div>

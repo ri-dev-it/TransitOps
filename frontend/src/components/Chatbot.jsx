@@ -27,10 +27,10 @@ export default function Chatbot() {
             {messages.map((m, i) => <p key={i} className={m.sender === 'user' ? 'text-right' : 'text-left'}>{m.text}</p>)}
           </div>
           <input value={input} onChange={(e) => setInput(e.target.value)} className="w-full p-2 border rounded-full" />
-          <button onClick={sendMessage} className="mt-2 bg-[#6E8B3D] text-white rounded-full py-1">Send</button>
+          <button onClick={sendMessage} className="mt-2 bg-[var(--accent)] text-white rounded-full py-1">Send</button>
         </div>
       )}
-      <button onClick={() => setIsOpen(!isOpen)} className="bg-[#6E8B3D] text-white p-4 rounded-full shadow-lg">Chat</button>
+      <button onClick={() => setIsOpen(!isOpen)} className="bg-[var(--accent)] text-white p-4 rounded-full shadow-lg">Chat</button>
     </div>
   );
 }

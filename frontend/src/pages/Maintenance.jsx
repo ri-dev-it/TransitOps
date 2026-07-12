@@ -5,7 +5,7 @@ export default function Maintenance() {
   return (
     <div className="mx-auto max-w-7xl space-y-6">
       <div className="rounded-[32px] border border-[#D8C9A7]/70 bg-white p-6 shadow-sm dark:border-[#3B433D] dark:bg-[#242826]">
-        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#6E8B3D]">Maintenance</p>
+        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">Maintenance</p>
         <h1 className="mt-2 text-3xl font-semibold">Maintenance</h1>
       </div>
       <div className="space-y-3">

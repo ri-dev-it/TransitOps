@@ -43,7 +43,7 @@ export default function Vehicles() {
     <div className="p-6 max-w-7xl mx-auto">
       <div className="flex justify-between mb-6">
         <h1 className="text-3xl font-bold">Vehicle Registry</h1>
-        {isAdmin && <button onClick={() => { setEditId(null); setIsModalOpen(true); }} className="bg-[#6E8B3D] text-white px-4 py-2 rounded-full">+ Register</button>}
+        {isAdmin && <button onClick={() => { setEditId(null); setIsModalOpen(true); }} className="bg-[var(--accent)] text-white px-4 py-2 rounded-full">+ Register</button>}
       </div>
       <table className="w-full bg-white rounded-3xl shadow-sm border border-[#D8C9A7]">
         <thead className="bg-[#F6F5F2]"><tr><th className="p-4">Registration</th><th className="p-4">Model</th><th className="p-4">Status</th><th className="p-4">Actions</th></tr></thead>

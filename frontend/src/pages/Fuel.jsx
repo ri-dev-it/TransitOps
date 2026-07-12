@@ -88,7 +88,7 @@ export default function Fuel() {
         </div>
         <button 
           onClick={() => setIsModalOpen(true)}
-          className="rounded-full bg-[#6E8B3D] px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-[#5F7633]"
+          className="rounded-full bg-[var(--accent)] px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-[var(--accent-hover)]"
         >
           + Add Fuel Log
         </button>
@@ -162,7 +162,7 @@ export default function Fuel() {
                 <button type="button" onClick={() => setIsModalOpen(false)} className="rounded-full px-5 py-2.5 text-sm font-semibold text-[#6B6B6B] hover:bg-gray-100 dark:hover:bg-[#1F2421]">
                   Cancel
                 </button>
-                <button type="submit" className="rounded-full bg-[#6E8B3D] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#5F7633]">
+                <button type="submit" className="rounded-full bg-[var(--accent)] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[var(--accent-hover)]">
                   Save Log
                 </button>
               </div>

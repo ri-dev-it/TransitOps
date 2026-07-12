@@ -1,42 +1,54 @@
 import { NavLink } from 'react-router-dom';
 
-export default function Sidebar() {
-  // Retrieve user and role once to avoid redeclaration errors
+export default function Sidebar({ open }) {
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const role = user.role || '';
-
-  // Logic to restrict access: only these roles see financial/admin sections
   const canAccessManagement = ['fleet_manager', 'financial_analyst', 'admin'].includes(role);
+  const navClass = ({ isActive }) =>
+    `flex h-11 items-center rounded-2xl px-3 text-sm font-semibold transition-colors ${
+      isActive
+        ? 'bg-[var(--accent)] text-white shadow-sm'
+        : 'text-[#2A2A2A] hover:bg-[#D8C9A7]/30 dark:text-[#F5F5F5]'
+    }`;
 
   return (
-    <aside className="w-64 min-h-screen bg-[#F6F5F2] p-6 dark:bg-[#1F2421]">
-      <div className="mb-8">
-        <h2 className="text-xl font-bold text-[#2A2A2A] dark:text-[#F5F5F5]">TransitOps</h2>
+    <aside
+      className={`fixed inset-y-0 left-0 z-30 hidden flex-col border-r border-[#D8C9A7]/70 bg-white p-4 transition-all duration-300 dark:border-[#3B433D] dark:bg-[#1F2421] md:flex ${
+        open ? 'w-64' : 'w-20'
+      }`}
+    >
+      <div className="mb-8 flex h-12 items-center px-2">
+        <h2 className="truncate text-xl font-bold text-[#2A2A2A] dark:text-[#F5F5F5]">
+          {open ? 'TransitOps' : 'TO'}
+        </h2>
       </div>
 
-      <nav className="flex flex-col gap-2">
-        <NavLink to="/" className="p-2 rounded-lg hover:bg-[#D8C9A7]/20">Dashboard</NavLink>
-        <NavLink to="/trips" className="p-2 rounded-lg hover:bg-[#D8C9A7]/20">Trips</NavLink>
-        <NavLink to="/vehicles" className="p-2 rounded-lg hover:bg-[#D8C9A7]/20">Vehicles</NavLink>
-        <NavLink to="/drivers" className="p-2 rounded-lg hover:bg-[#D8C9A7]/20">Drivers</NavLink>
-        
-        {/* Role-Based Access Control (RBAC) UI Enforcement */}
+      <nav className="flex flex-1 flex-col gap-2">
+        <NavLink to="/" className={navClass}>{open ? 'Dashboard' : 'D'}</NavLink>
+        <NavLink to="/trips" className={navClass}>{open ? 'Trips' : 'T'}</NavLink>
+        <NavLink to="/vehicles" className={navClass}>{open ? 'Vehicles' : 'V'}</NavLink>
+        <NavLink to="/drivers" className={navClass}>{open ? 'Drivers' : 'DR'}</NavLink>
+
         {canAccessManagement && (
           <>
-            <div className="mt-4 text-xs font-bold text-[#6B6B6B] uppercase">Management</div>
-            <NavLink to="/maintenance" className="p-2 rounded-lg hover:bg-[#D8C9A7]/20">Maintenance</NavLink>
-            <NavLink to="/reports" className="p-2 rounded-lg hover:bg-[#D8C9A7]/20">Reports</NavLink>
-            <NavLink to="/fuel-expenses" className="p-2 rounded-lg hover:bg-[#D8C9A7]/20">Fuel & Expenses</NavLink>
+            {open && (
+              <div className="mt-5 px-3 text-xs font-bold uppercase tracking-[0.18em] text-[#6B6B6B] dark:text-[#B4B4B4]">
+                Management
+              </div>
+            )}
+            <NavLink to="/maintenance" className={navClass}>{open ? 'Maintenance' : 'M'}</NavLink>
+            <NavLink to="/reports" className={navClass}>{open ? 'Reports' : 'R'}</NavLink>
+            <NavLink to="/fuel" className={navClass}>{open ? 'Fuel & Expenses' : 'F'}</NavLink>
           </>
         )}
       </nav>
-      
-      <div className="absolute bottom-6">
-        <button 
-          onClick={() => { localStorage.clear(); window.location.href = '/login'; }} 
-          className="text-red-500 font-semibold"
+
+      <div className="pt-4">
+        <button
+          onClick={() => { localStorage.clear(); window.location.href = '/login'; }}
+          className="h-11 w-full rounded-2xl border border-red-200 px-3 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50 dark:border-red-900/50 dark:hover:bg-red-950/30"
         >
-          Logout
+          {open ? 'Logout' : 'X'}
         </button>
       </div>
     </aside>

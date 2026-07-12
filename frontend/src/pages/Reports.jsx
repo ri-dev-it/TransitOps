@@ -60,7 +60,7 @@ export default function Reports() {
         </div>
         <button 
           onClick={exportToCSV}
-          className="rounded-full border border-[#6E8B3D] text-[#6E8B3D] px-5 py-2.5 text-sm font-semibold transition-all hover:bg-[#6E8B3D] hover:text-white"
+          className="rounded-full border border-[var(--accent)] text-[var(--accent)] px-5 py-2.5 text-sm font-semibold transition-all hover:bg-[var(--accent)] hover:text-white"
         >
           Export to CSV
         </button>

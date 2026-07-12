@@ -89,7 +89,7 @@ export default function Trips() {
         {/* Added onClick handler to open modal */}
         <button 
           onClick={() => setIsModalOpen(true)}
-          className="rounded-full bg-[#6E8B3D] px-5 py-2.5 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-[#5F7633] hover:shadow-md active:scale-[0.98]"
+          className="rounded-full bg-[var(--accent)] px-5 py-2.5 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-[var(--accent-hover)] hover:shadow-md active:scale-[0.98]"
         >
           + Create Trip
         </button>
@@ -128,7 +128,7 @@ export default function Trips() {
                   </td>
                   <td className="px-6 py-4">
                     {trip.status === 'Draft' && (
-                      <button className="text-sm font-semibold text-[#6E8B3D] hover:underline">Dispatch</button>
+                      <button className="text-sm font-semibold text-[var(--accent)] hover:underline">Dispatch</button>
                     )}
                     {trip.status === 'Dispatched' && (
                       <button className="text-sm font-semibold text-blue-600 hover:underline">Complete</button>
@@ -201,7 +201,7 @@ export default function Trips() {
                 <button type="button" onClick={() => setIsModalOpen(false)} className="rounded-full px-5 py-2.5 text-sm font-semibold text-[#6B6B6B] transition-all hover:bg-gray-100 dark:hover:bg-[#1F2421]">
                   Cancel
                 </button>
-                <button type="submit" className="rounded-full bg-[#6E8B3D] px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-[#5F7633]">
+                <button type="submit" className="rounded-full bg-[var(--accent)] px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-[var(--accent-hover)]">
                   Save Trip
                 </button>
               </div>
