@@ -1,17 +1,44 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-export default function Login() {
-  const { login } = useAuth();
-  const navigate = useNavigate();
-  const [email, setEmail] = useState('ops@transitops.com');
-  const [password, setPassword] = useState('demo');
+const demoAccounts = [
+  { label: 'Fleet manager', email: 'ops@transitops.com', password: 'Passw0rd!' },
+  { label: 'Driver', email: 'driver@transitops.com', password: 'Passw0rd!' },
+  { label: 'Safety officer', email: 'safety@transitops.com', password: 'Passw0rd!' },
+  { label: 'Financial analyst', email: 'finance@transitops.com', password: 'Passw0rd!' },
+];
 
-  function handleSubmit(event) {
+export default function Login() {
+  const { login, isAuthenticating } = useAuth();
+  const navigate = useNavigate();
+  const emailRef = useRef(null);
+  const [email, setEmail] = useState('ops@transitops.com');
+  const [password, setPassword] = useState('Passw0rd!');
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    emailRef.current?.focus();
+  }, []);
+
+  async function handleSubmit(event) {
     event.preventDefault();
-    login(email, password);
-    navigate('/');
+    setError('');
+
+    try {
+      await login(email, password, rememberMe);
+      navigate('/', { replace: true });
+    } catch (submitError) {
+      setError(submitError.message);
+    }
+  }
+
+  function fillDemoAccount(account) {
+    setEmail(account.email);
+    setPassword(account.password);
+    setError('');
   }
 
   return (
@@ -42,21 +69,45 @@ export default function Login() {
         <div className="p-8 sm:p-10">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#6E8B3D]">Welcome back</p>
           <h2 className="mt-2 text-3xl font-semibold">Sign in to TransitOps</h2>
-          <p className="mt-2 text-sm text-[#6B6B6B] dark:text-[#B4B4B4]">Use any email and password to enter the preview experience.</p>
+          <p className="mt-2 text-sm text-[#6B6B6B] dark:text-[#B4B4B4]">Use any valid email and password to enter the preview experience.</p>
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-4">
             <label className="block">
               <span className="mb-2 block text-sm font-medium">Email</span>
-              <input className="input-field" type="email" value={email} onChange={(event) => setEmail(event.target.value)} />
+              <input ref={emailRef} className="input-field" type="email" value={email} onChange={(event) => setEmail(event.target.value)} autoComplete="email" required aria-describedby={error ? 'login-error' : undefined} />
             </label>
             <label className="block">
               <span className="mb-2 block text-sm font-medium">Password</span>
-              <input className="input-field" type="password" value={password} onChange={(event) => setPassword(event.target.value)} />
+              <div className="relative">
+                <input className="input-field pr-16" type={showPassword ? 'text' : 'password'} value={password} onChange={(event) => setPassword(event.target.value)} autoComplete="current-password" minLength="6" required aria-describedby={error ? 'login-error' : undefined} />
+                <button type="button" onClick={() => setShowPassword((value) => !value)} className="absolute right-3 top-1/2 -translate-y-1/2 text-sm font-medium text-[#6E8B3D]" aria-label={showPassword ? 'Hide password' : 'Show password'}>
+                  {showPassword ? 'Hide' : 'Show'}
+                </button>
+              </div>
             </label>
-            <button type="submit" className="w-full rounded-full bg-[#6E8B3D] px-4 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#5F7633] hover:shadow-md active:scale-[0.98]">
-              Enter Smart Operations
+
+            <div className="flex items-center justify-between text-sm">
+              <label className="flex items-center gap-2 text-[#6B6B6B] dark:text-[#B4B4B4]">
+                <input type="checkbox" checked={rememberMe} onChange={(event) => setRememberMe(event.target.checked)} className="rounded border-[#D8C9A7] text-[#6E8B3D] focus:ring-[#6E8B3D]" />
+                Keep me signed in
+              </label>
+              <button type="button" className="font-medium text-[#6E8B3D]">Forgot password?</button>
+            </div>
+
+            {error ? <p id="login-error" role="alert" className="rounded-2xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p> : null}
+
+            <button type="submit" disabled={isAuthenticating} className="w-full rounded-full bg-[#6E8B3D] px-4 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#5F7633] hover:shadow-md active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70">
+              {isAuthenticating ? 'Signing in…' : 'Enter Smart Operations'}
             </button>
           </form>
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            {demoAccounts.map((account) => (
+              <button key={account.email} type="button" onClick={() => fillDemoAccount(account)} className="rounded-full border border-[#D8C9A7] bg-[#FCFAF7] px-3 py-2 text-xs font-semibold text-[#2A2A2A] transition hover:-translate-y-0.5 hover:shadow-sm dark:border-[#3B433D] dark:bg-[#1F2421] dark:text-[#F5F5F5]">
+                {account.label}
+              </button>
+            ))}
+          </div>
 
           <div className="mt-6 rounded-2xl border border-[#D8C9A7]/70 bg-[#F6F5F2] p-4 text-sm text-[#6B6B6B] shadow-sm transition-all duration-300 dark:border-[#3B433D] dark:bg-[#242826] dark:text-[#B4B4B4]">
             <p className="font-semibold text-[#2A2A2A] dark:text-[#F5F5F5]">Preview mode</p>

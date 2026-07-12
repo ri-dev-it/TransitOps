@@ -9,16 +9,21 @@ import Fuel from './pages/Fuel';
 import Reports from './pages/Reports';
 import Notifications from './pages/Notifications';
 import Settings from './pages/Settings';
+import AccessDenied from './pages/AccessDenied';
 import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
+import AuthToast from './components/AuthToast';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 function AppRoutes() {
   const { user } = useAuth();
 
   return (
-    <Routes>
+    <>
+      <AuthToast />
+      <Routes>
       <Route path="/login" element={user ? <Navigate to="/" replace /> : <Login />} />
+      <Route path="/unauthorized" element={<AccessDenied />} />
       <Route
         path="/"
         element={
@@ -29,16 +34,17 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
-      <Route path="/vehicles" element={<ProtectedRoute><Layout><Vehicles /></Layout></ProtectedRoute>} />
-      <Route path="/drivers" element={<ProtectedRoute><Layout><Drivers /></Layout></ProtectedRoute>} />
-      <Route path="/trips" element={<ProtectedRoute><Layout><Trips /></Layout></ProtectedRoute>} />
-      <Route path="/maintenance" element={<ProtectedRoute><Layout><Maintenance /></Layout></ProtectedRoute>} />
-      <Route path="/fuel" element={<ProtectedRoute><Layout><Fuel /></Layout></ProtectedRoute>} />
-      <Route path="/reports" element={<ProtectedRoute><Layout><Reports /></Layout></ProtectedRoute>} />
+      <Route path="/vehicles" element={<ProtectedRoute allowedRoles={['fleet-manager', 'safety-officer']}><Layout><Vehicles /></Layout></ProtectedRoute>} />
+      <Route path="/drivers" element={<ProtectedRoute allowedRoles={['fleet-manager']}><Layout><Drivers /></Layout></ProtectedRoute>} />
+      <Route path="/trips" element={<ProtectedRoute allowedRoles={['fleet-manager', 'driver']}><Layout><Trips /></Layout></ProtectedRoute>} />
+      <Route path="/maintenance" element={<ProtectedRoute allowedRoles={['fleet-manager', 'safety-officer']}><Layout><Maintenance /></Layout></ProtectedRoute>} />
+      <Route path="/fuel" element={<ProtectedRoute allowedRoles={['fleet-manager', 'financial-analyst']}><Layout><Fuel /></Layout></ProtectedRoute>} />
+      <Route path="/reports" element={<ProtectedRoute allowedRoles={['fleet-manager', 'safety-officer', 'financial-analyst']}><Layout><Reports /></Layout></ProtectedRoute>} />
       <Route path="/notifications" element={<ProtectedRoute><Layout><Notifications /></Layout></ProtectedRoute>} />
       <Route path="/settings" element={<ProtectedRoute><Layout><Settings /></Layout></ProtectedRoute>} />
       <Route path="*" element={<Navigate to={user ? '/' : '/login'} replace />} />
-    </Routes>
+      </Routes>
+    </>
   );
 }
 

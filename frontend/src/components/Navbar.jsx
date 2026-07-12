@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { mockNotifications, mockVehicles } from '../utils/mockData';
+import UserProfileCard from './UserProfileCard';
 
 export default function Navbar({ sidebarOpen, onToggleSidebar }) {
   const { user, logout } = useAuth();
@@ -82,6 +83,7 @@ export default function Navbar({ sidebarOpen, onToggleSidebar }) {
             <Link to="/settings" className="rounded-full border border-[#D8C9A7] bg-white px-3 py-2 text-sm font-medium text-[#2A2A2A] dark:border-[#3B433D] dark:bg-[#1F2421] dark:text-[#F5F5F5]">
               Settings
             </Link>
+            <UserProfileCard user={user} />
             <button onClick={logout} className="rounded-full bg-[#6E8B3D] px-3 py-2 text-sm font-semibold text-white">
               Logout
             </button>

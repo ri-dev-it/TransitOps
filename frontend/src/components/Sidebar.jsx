@@ -1,18 +1,22 @@
 import { NavLink } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const navItems = [
-  { to: '/', label: 'Dashboard', icon: '◉' },
-  { to: '/vehicles', label: 'Vehicles', icon: '▣' },
-  { to: '/drivers', label: 'Drivers', icon: '◎' },
-  { to: '/trips', label: 'Trips', icon: '↗' },
-  { to: '/maintenance', label: 'Maintenance', icon: '⚙' },
-  { to: '/fuel', label: 'Fuel & Expenses', icon: '⛽' },
-  { to: '/reports', label: 'Reports', icon: '◫' },
-  { to: '/notifications', label: 'Notifications', icon: '🔔' },
-  { to: '/settings', label: 'Settings', icon: '⚙' },
+  { to: '/', label: 'Dashboard', icon: '◉', roles: ['fleet-manager', 'driver', 'safety-officer', 'financial-analyst'] },
+  { to: '/vehicles', label: 'Vehicles', icon: '▣', roles: ['fleet-manager', 'safety-officer'] },
+  { to: '/drivers', label: 'Drivers', icon: '◎', roles: ['fleet-manager'] },
+  { to: '/trips', label: 'Trips', icon: '↗', roles: ['fleet-manager', 'driver'] },
+  { to: '/maintenance', label: 'Maintenance', icon: '⚙', roles: ['fleet-manager', 'safety-officer'] },
+  { to: '/fuel', label: 'Fuel & Expenses', icon: '⛽', roles: ['fleet-manager', 'financial-analyst'] },
+  { to: '/reports', label: 'Reports', icon: '◫', roles: ['fleet-manager', 'safety-officer', 'financial-analyst'] },
+  { to: '/notifications', label: 'Notifications', icon: '🔔', roles: ['fleet-manager', 'driver', 'safety-officer', 'financial-analyst'] },
 ];
 
 export default function Sidebar({ open, onToggle }) {
+  const { user } = useAuth();
+  const role = user?.role || 'fleet-manager';
+  const visibleNavItems = navItems.filter((item) => item.roles.includes(role));
+
   return (
     <aside className={`fixed left-0 top-0 z-30 h-screen overflow-hidden border-r border-[#3D5B4C] bg-[linear-gradient(180deg,#295A4B_0%,#2F6554_100%)] text-white shadow-[0_18px_45px_rgba(0,0,0,0.22)] transition-all duration-300 ${open ? 'w-[272px]' : 'w-20'} md:translate-x-0`}>
       <div className="flex h-full flex-col">
@@ -35,7 +39,7 @@ export default function Sidebar({ open, onToggle }) {
 
         <nav className="mt-2 flex-1 overflow-y-auto px-1 pb-3">
           <div className="space-y-1">
-            {navItems.map((item) => (
+            {visibleNavItems.map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
