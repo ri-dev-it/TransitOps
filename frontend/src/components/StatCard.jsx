@@ -1,11 +1,17 @@
-export default function StatCard({ label, value, hint, accent = false }) {
-  return (
-    <div className="rounded-3xl border border-[#D8C9A7]/70 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:border-[#3B433D] dark:bg-[#242826]">
-      <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#6B6B6B] dark:text-[#B4B4B4]">{label}</p>
-      <p className={`text-3xl font-semibold ${accent ? 'text-[#6E8B3D]' : 'text-[#2A2A2A] dark:text-[#F5F5F5]'}`}>
-        {value}
-      </p>
-      {hint && <p className="mt-2 text-sm text-[#6B6B6B] dark:text-[#B4B4B4]">{hint}</p>}
-    </div>
-  );
-}
+import React from 'react';
+
+const StatCard = ({ title, value, icon, color }) => {
+    return (
+        <div className="bg-white rounded-lg shadow p-6 flex items-center">
+            <div className={`p-4 rounded-full text-white ${color} mr-4`}>
+                {icon}
+            </div>
+            <div>
+                <p className="text-sm text-gray-500 uppercase font-semibold">{title}</p>
+                <h3 className="text-2xl font-bold text-gray-800">{value}</h3>
+            </div>
+        </div>
+    );
+};
+
+export default StatCard;

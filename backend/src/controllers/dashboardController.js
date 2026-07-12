@@ -5,6 +5,7 @@ async function getKpis(req, res) {
     const { type, status, region } = req.query;
     const vClauses = [];
     const vValues = [];
+    
     if (type) {
       vValues.push(type);
       vClauses.push(`type = $${vValues.length}`);
@@ -17,6 +18,7 @@ async function getKpis(req, res) {
       vValues.push(region);
       vClauses.push(`region = $${vValues.length}`);
     }
+    
     const vWhere = vClauses.length ? `WHERE ${vClauses.join(' AND ')}` : '';
 
     const vehicleStats = await pool.query(
@@ -63,4 +65,5 @@ async function getKpis(req, res) {
   }
 }
 
+// This export must exactly match what you require in the routes file
 module.exports = { getKpis };

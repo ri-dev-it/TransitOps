@@ -1,25 +1,93 @@
+import { useState, useEffect } from 'react';
 import StatCard from '../components/StatCard';
 import ChartPlaceholder from '../components/ChartPlaceholder';
 import { dashboardKpis, mockDrivers, mockMaintenance, mockTrips, mockVehicles } from '../utils/mockData';
 import StatusBadge from '../components/StatusBadge';
 
 export default function Dashboard() {
+  const [kpis, setKpis] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [filters, setFilters] = useState({ type: '', status: '', region: '' });
+
+  // Fetch KPIs whenever filters change
+  useEffect(() => {
+    const fetchKpis = async () => {
+      setLoading(true);
+      try {
+        const queryParams = new URLSearchParams(filters).toString();
+        const response = await fetch(`/api/dashboard/kpis?${queryParams}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setKpis(data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch dashboard KPIs:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchKpis();
+  }, [filters]);
+
+  const handleFilterChange = (e) => {
+    setFilters((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
   return (
     <div className="mx-auto max-w-7xl space-y-6">
+      {/* Header Section */}
       <div className="flex flex-col gap-4 rounded-[32px] border border-[#D8C9A7]/70 bg-white p-6 shadow-sm dark:border-[#3B433D] dark:bg-[#242826] md:flex-row md:items-end md:justify-between">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#6E8B3D]">Operations overview</p>
           <h1 className="mt-2 text-3xl font-semibold">Smart Transport Operations Platform</h1>
-          <p className="mt-2 max-w-2xl text-sm text-[#6B6B6B] dark:text-[#B4B4B4]">A premium front-end foundation for fleet visibility, dispatch coordination, maintenance oversight, and cost control.</p>
+          <p className="mt-2 max-w-2xl text-sm text-[#6B6B6B] dark:text-[#B4B4B4]">
+            A premium front-end foundation for fleet visibility, dispatch coordination, maintenance oversight, and cost control.
+          </p>
         </div>
-        <div className="rounded-full bg-[#F6F5F2] px-4 py-2 text-sm font-medium text-[#2A2A2A] dark:bg-[#1F2421] dark:text-[#F5F5F5]">Updated 2 min ago</div>
+        
+        {/* Filters */}
+        <div className="flex gap-3">
+          <select name="type" onChange={handleFilterChange} value={filters.type} className="rounded-full border border-[#D8C9A7]/70 bg-[#F6F5F2] px-4 py-2 text-sm text-[#2A2A2A] outline-none dark:border-[#3B433D] dark:bg-[#1F2421] dark:text-[#F5F5F5]">
+            <option value="">All Types</option>
+            <option value="Truck">Truck</option>
+            <option value="Van">Van</option>
+          </select>
+          <select name="status" onChange={handleFilterChange} value={filters.status} className="rounded-full border border-[#D8C9A7]/70 bg-[#F6F5F2] px-4 py-2 text-sm text-[#2A2A2A] outline-none dark:border-[#3B433D] dark:bg-[#1F2421] dark:text-[#F5F5F5]">
+            <option value="">All Statuses</option>
+            <option value="Available">Available</option>
+            <option value="On Trip">On Trip</option>
+            <option value="In Shop">In Shop</option>
+          </select>
+          <select name="region" onChange={handleFilterChange} value={filters.region} className="rounded-full border border-[#D8C9A7]/70 bg-[#F6F5F2] px-4 py-2 text-sm text-[#2A2A2A] outline-none dark:border-[#3B433D] dark:bg-[#1F2421] dark:text-[#F5F5F5]">
+            <option value="">All Regions</option>
+            <option value="North">North</option>
+            <option value="South">South</option>
+          </select>
+        </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {dashboardKpis.map((item) => (
-          <StatCard key={item.label} label={item.label} value={item.value} hint={item.change} accent={item.label === 'Active Trips' || item.label === 'Fleet Utilization'} />
-        ))}
-      </div>
+      {/* KPIs Grid */}
+      {loading ? (
+        <div className="py-8 text-center text-[#6B6B6B]">Loading metrics...</div>
+      ) : kpis ? (
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <StatCard label="Active Vehicles" value={kpis.active_vehicles} hint="Currently on route" />
+          <StatCard label="Available Vehicles" value={kpis.available_vehicles} hint="Ready for dispatch" />
+          <StatCard label="In Maintenance" value={kpis.vehicles_in_maintenance} hint="In shop" />
+          <StatCard label="Fleet Utilization" value={`${kpis.fleet_utilization_percent}%`} hint="Active vs Total" accent />
+          
+          <StatCard label="Active Trips" value={kpis.active_trips} hint="Dispatched" accent />
+          <StatCard label="Pending Trips" value={kpis.pending_trips} hint="Drafts" />
+          <StatCard label="Drivers On Duty" value={kpis.drivers_on_duty} hint="Active personnel" />
+        </div>
+      ) : (
+        <div className="py-8 text-center text-red-500">Failed to load metrics.</div>
+      )}
 
       <div className="flex flex-wrap gap-3">
         {['Add Vehicle', 'Assign Driver', 'Create Trip', 'Generate Report'].map((action) => (
@@ -29,6 +97,7 @@ export default function Dashboard() {
         ))}
       </div>
 
+      {/* Analytics & Layout Grid */}
       <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
         <ChartPlaceholder title="Fleet utilization" subtitle="Capacity versus active routes" />
         <div className="card p-5">
@@ -155,20 +224,6 @@ export default function Dashboard() {
               ))}
             </div>
           </div>
-        </div>
-      </div>
-
-      <div className="card p-5">
-        <div className="mb-4 flex items-center justify-between">
-          <div>
-            <h3 className="text-lg font-semibold">Quick actions</h3>
-            <p className="text-sm text-[#6B6B6B] dark:text-[#B4B4B4]">Jump into the most common operations tasks</p>
-          </div>
-        </div>
-        <div className="flex flex-wrap gap-3">
-          <button className="rounded-full bg-[#6E8B3D] px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#5F7633] hover:shadow-md active:scale-[0.98]">Create trip</button>
-          <button className="rounded-full border border-[#D8C9A7] bg-[#D8C9A7]/70 px-4 py-2 text-sm font-semibold text-[#2A2A2A] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-sm active:scale-[0.98]">Add maintenance</button>
-          <button className="rounded-full border border-[#D8C9A7] bg-white px-4 py-2 text-sm font-semibold text-[#2A2A2A] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-sm active:scale-[0.98] dark:bg-[#1F2421]">Review reports</button>
         </div>
       </div>
     </div>
