@@ -1,6 +1,6 @@
 import StatCard from '../components/StatCard';
 import ChartPlaceholder from '../components/ChartPlaceholder';
-import { dashboardKpis, mockDrivers, mockMaintenance, mockTrips } from '../utils/mockData';
+import { dashboardKpis, mockDrivers, mockMaintenance, mockTrips, mockVehicles } from '../utils/mockData';
 import StatusBadge from '../components/StatusBadge';
 
 export default function Dashboard() {
@@ -18,6 +18,14 @@ export default function Dashboard() {
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {dashboardKpis.map((item) => (
           <StatCard key={item.label} label={item.label} value={item.value} hint={item.change} accent={item.label === 'Active Trips' || item.label === 'Fleet Utilization'} />
+        ))}
+      </div>
+
+      <div className="flex flex-wrap gap-3">
+        {['Add Vehicle', 'Assign Driver', 'Create Trip', 'Generate Report'].map((action) => (
+          <button key={action} className="rounded-full border border-[#D8C9A7] bg-white px-4 py-2 text-sm font-semibold text-[#2A2A2A] shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md dark:border-[#3B433D] dark:bg-[#1F2421] dark:text-[#F5F5F5]">
+            {action}
+          </button>
         ))}
       </div>
 
@@ -46,6 +54,47 @@ export default function Dashboard() {
       </div>
 
       <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
+        <div className="card p-5">
+          <div className="mb-4 flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-semibold">Fleet status</h3>
+              <p className="text-sm text-[#6B6B6B] dark:text-[#B4B4B4]">Live fleet posture</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="relative flex h-32 w-32 items-center justify-center rounded-full border-[10px] border-[#D8C9A7]/60">
+              <div className="absolute inset-0 rounded-full" style={{ background: 'conic-gradient(#6E8B3D 0 58%, #D8C9A7 58% 78%, #A7A7A7 78% 100%)' }} />
+              <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-white text-sm font-semibold text-[#2A2A2A] dark:bg-[#242826] dark:text-[#F5F5F5]">58%</div>
+            </div>
+            <div className="space-y-2 text-sm">
+              <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#6E8B3D]" />Active</div>
+              <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#D8C9A7]" />Maintenance</div>
+              <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#A7A7A7]" />Offline</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="card p-5">
+          <div className="mb-4 flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-semibold">Recent activity</h3>
+              <p className="text-sm text-[#6B6B6B] dark:text-[#B4B4B4]">Recent operations updates</p>
+            </div>
+          </div>
+          <div className="space-y-3">
+            {[
+              { label: 'Vehicle assigned', detail: 'TR-204 assigned to Mina Chen' },
+              { label: 'Driver checked in', detail: 'Aarav Patel checked in for Route 12' },
+              { label: 'Fuel updated', detail: 'TR-221 fuel log added for today' },
+              { label: 'Maintenance scheduled', detail: 'TR-312 brake inspection booked' },
+            ].map((item) => (
+              <div key={item.label} className="rounded-2xl border border-[#D8C9A7]/60 bg-[#FCFAF7] px-3 py-3 dark:border-[#3B433D] dark:bg-[#1F2421]">
+                <p className="font-semibold">{item.label}</p>
+                <p className="mt-1 text-sm text-[#6B6B6B] dark:text-[#B4B4B4]">{item.detail}</p>
+              </div>
+            ))}
+          </div>
+        </div>
         <div className="card p-5">
           <div className="mb-4 flex items-center justify-between">
             <div>
