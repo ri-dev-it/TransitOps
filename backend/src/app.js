@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 require('dotenv').config();
 
+// Route Imports
 const authRoutes = require('./routes/authRoutes');
 const vehicleRoutes = require('./routes/vehicleRoutes');
 const driverRoutes = require('./routes/driverRoutes');
@@ -16,13 +17,19 @@ const reportRoutes = require('./routes/reportRoutes');
 
 const app = express();
 
+// Security and Logging Middleware
 app.use(helmet());
-app.use(cors({ origin: process.env.CLIENT_ORIGIN || '*', credentials: true }));
+app.use(cors({ 
+    origin: process.env.CLIENT_ORIGIN || '*', 
+    credentials: true 
+}));
 app.use(express.json());
 app.use(morgan('dev'));
 
+// Health Check
 app.get('/api/health', (req, res) => res.json({ status: 'ok', service: 'TransitOps API' }));
 
+// Route Mounts
 app.use('/api/auth', authRoutes);
 app.use('/api/vehicles', vehicleRoutes);
 app.use('/api/drivers', driverRoutes);
@@ -33,15 +40,17 @@ app.use('/api/expenses', expenseRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/reports', reportRoutes);
 
-// 404 handler
+// 404 Handler
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found.' });
 });
 
-// Global error handler
+// Global Error Handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(err.status || 500).json({ message: err.message || 'Internal server error.' });
+  res.status(err.status || 500).json({ 
+    message: err.message || 'Internal server error.' 
+  });
 });
 
 module.exports = app;

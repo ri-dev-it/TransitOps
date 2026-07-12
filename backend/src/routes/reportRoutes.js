@@ -1,10 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const { authenticate } = require('../middleware/auth');
-const { getVehicleReports, exportVehicleReportsCsv } = require('../controllers/reportController');
+const { getReports } = require('../controllers/reportController');
 
 router.use(authenticate);
-router.get('/', getVehicleReports);
-router.get('/export/csv', exportVehicleReportsCsv);
+router.get('/', getReports);
 
 module.exports = router;
