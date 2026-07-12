@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply min-h-screen bg-[#F6F5F2] text-[#2A2A2A] antialiased transition-colors duration-300 dark:bg-[#171A19] dark:text-[#F5F5F5];
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-semibold;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-[28px] border border-[#D8C9A7]/70 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:border-[#3B433D] dark:bg-[#242826];
+  }
+
+  .input-field {
+    @apply w-full rounded-2xl border border-[#D8C9A7]/70 bg-[#FCFAF7] px-3 py-2.5 text-sm outline-none transition-all duration-300 hover:border-[#6E8B3D]/80 focus:border-[#6E8B3D] focus:ring-2 focus:ring-[#6E8B3D]/20 dark:border-[#3B433D] dark:bg-[#1F2421] dark:text-[#F5F5F5];
+  }
+}
