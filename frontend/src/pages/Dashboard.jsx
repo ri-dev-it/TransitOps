@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import StatCard from '../components/StatCard';
 import ChartPlaceholder from '../components/ChartPlaceholder';
+import { dashboardKpis, mockDrivers, mockMaintenance, mockTrips, mockVehicles } from '../utils/mockData';
 import StatusBadge from '../components/StatusBadge';
-import { mockDrivers, mockMaintenance, mockTrips } from '../utils/mockData';
 
 export default function Dashboard() {
   const [kpis, setKpis] = useState(null);
@@ -80,6 +80,18 @@ export default function Dashboard() {
         </div>
       ) : null}
 
+<<<<<<< HEAD
+=======
+      <div className="flex flex-wrap gap-3">
+        {['Add Vehicle', 'Assign Driver', 'Create Trip', 'Generate Report'].map((action) => (
+          <button key={action} className="rounded-full border border-[#D8C9A7] bg-white px-4 py-2 text-sm font-semibold text-[#2A2A2A] shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md dark:border-[#3B433D] dark:bg-[#1F2421] dark:text-[#F5F5F5]">
+            {action}
+          </button>
+        ))}
+      </div>
+
+      {/* Analytics & Layout Grid */}
+>>>>>>> 7c3fdbd14ebbdcfd4800b4cab587968415631606
       <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
         <ChartPlaceholder title="Fleet utilization" subtitle="Capacity versus active routes" />
         <div className="card p-5 bg-white border border-[#D8C9A7]/70 rounded-3xl dark:bg-[#242826] dark:border-[#3B433D]">
@@ -96,7 +108,116 @@ export default function Dashboard() {
                 </div>
                 <p className="text-sm font-semibold text-[#6E8B3D]">{vehicle.fuel_efficiency} km/L</p>
               </div>
+<<<<<<< HEAD
             )) : <p className="text-sm text-[#6B6B6B]">No fuel data logged yet.</p>}
+=======
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
+        <div className="card p-5">
+          <div className="mb-4 flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-semibold">Fleet status</h3>
+              <p className="text-sm text-[#6B6B6B] dark:text-[#B4B4B4]">Live fleet posture</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="relative flex h-32 w-32 items-center justify-center rounded-full border-[10px] border-[#D8C9A7]/60">
+              <div className="absolute inset-0 rounded-full" style={{ background: 'conic-gradient(#6E8B3D 0 58%, #D8C9A7 58% 78%, #A7A7A7 78% 100%)' }} />
+              <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-white text-sm font-semibold text-[#2A2A2A] dark:bg-[#242826] dark:text-[#F5F5F5]">58%</div>
+            </div>
+            <div className="space-y-2 text-sm">
+              <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#6E8B3D]" />Active</div>
+              <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#D8C9A7]" />Maintenance</div>
+              <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#A7A7A7]" />Offline</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="card p-5">
+          <div className="mb-4 flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-semibold">Recent activity</h3>
+              <p className="text-sm text-[#6B6B6B] dark:text-[#B4B4B4]">Recent operations updates</p>
+            </div>
+          </div>
+          <div className="space-y-3">
+            {[
+              { label: 'Vehicle assigned', detail: 'TR-204 assigned to Mina Chen' },
+              { label: 'Driver checked in', detail: 'Aarav Patel checked in for Route 12' },
+              { label: 'Fuel updated', detail: 'TR-221 fuel log added for today' },
+              { label: 'Maintenance scheduled', detail: 'TR-312 brake inspection booked' },
+            ].map((item) => (
+              <div key={item.label} className="rounded-2xl border border-[#D8C9A7]/60 bg-[#FCFAF7] px-3 py-3 dark:border-[#3B433D] dark:bg-[#1F2421]">
+                <p className="font-semibold">{item.label}</p>
+                <p className="mt-1 text-sm text-[#6B6B6B] dark:text-[#B4B4B4]">{item.detail}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="card p-5">
+          <div className="mb-4 flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-semibold">Recent trips</h3>
+              <p className="text-sm text-[#6B6B6B] dark:text-[#B4B4B4]">Live dispatch snapshot</p>
+            </div>
+            <button className="rounded-full bg-[#6E8B3D] px-3 py-2 text-sm font-semibold text-white">View all</button>
+          </div>
+          <div className="space-y-3">
+            {mockTrips.map((trip) => (
+              <div key={trip.id} className="flex flex-wrap items-center justify-between rounded-2xl border border-[#D8C9A7]/60 bg-[#FCFAF7] px-4 py-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-sm dark:border-[#3B433D] dark:bg-[#1F2421]">
+                <div>
+                  <p className="font-semibold">{trip.route}</p>
+                  <p className="text-sm text-[#6B6B6B] dark:text-[#B4B4B4]">{trip.vehicle} • {trip.driver}</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-sm font-medium text-[#2A2A2A] dark:text-[#F5F5F5]">{trip.eta}</span>
+                  <StatusBadge status={trip.status} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-6">
+          <div className="card p-5">
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-lg font-semibold">Maintenance alerts</h3>
+              <span className="rounded-full bg-[#D8C9A7]/60 px-3 py-1 text-sm font-medium">3 pending</span>
+            </div>
+            <div className="space-y-2">
+              {mockMaintenance.map((item) => (
+                <div key={item.id} className="flex items-center justify-between rounded-2xl bg-[#F6F5F2] px-3 py-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-sm dark:bg-[#1F2421]">
+                  <div>
+                    <p className="font-semibold">{item.vehicle}</p>
+                    <p className="text-sm text-[#6B6B6B] dark:text-[#B4B4B4]">{item.issue}</p>
+                  </div>
+                  <StatusBadge status={item.status} />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="card p-5">
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-lg font-semibold">Driver status</h3>
+              <span className="text-sm text-[#6E8B3D]">18 active</span>
+            </div>
+            <div className="space-y-2">
+              {mockDrivers.map((driver) => (
+                <div key={driver.id} className="flex items-center justify-between rounded-2xl border border-[#D8C9A7]/60 bg-[#FCFAF7] px-3 py-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-sm dark:border-[#3B433D] dark:bg-[#1F2421]">
+                  <div>
+                    <p className="font-semibold">{driver.driver}</p>
+                    <p className="text-sm text-[#6B6B6B] dark:text-[#B4B4B4]">{driver.license}</p>
+                  </div>
+                  <StatusBadge status={driver.status} />
+                </div>
+              ))}
+            </div>
+>>>>>>> 7c3fdbd14ebbdcfd4800b4cab587968415631606
           </div>
         </div>
       </div>
