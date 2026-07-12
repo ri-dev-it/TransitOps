@@ -1,16 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const { authenticate, authorize } = require('../middleware/auth');
-const {
-  listDrivers, getDriver, createDriver, updateDriver, deleteDriver,
-} = require('../controllers/driverController');
 
+// 1. Import the middleware
+const { authenticate } = require('../middleware/auth');
+
+// 2. Import the controller functions (Exact match to exports to prevent errors)
+const { getAllDrivers, createDriver, updateDriverStatus } = require('../controllers/driverController');
+
+// 3. Apply authentication middleware to all routes below
 router.use(authenticate);
 
-router.get('/', listDrivers);
-router.get('/:id', getDriver);
-router.post('/', authorize('fleet_manager', 'safety_officer', 'admin'), createDriver);
-router.put('/:id', authorize('fleet_manager', 'safety_officer', 'admin'), updateDriver);
-router.delete('/:id', authorize('fleet_manager', 'admin'), deleteDriver);
+// 4. Define driver routes
+router.get('/', getAllDrivers);
+router.post('/', createDriver);
+router.patch('/:id/status', updateDriverStatus);
 
 module.exports = router;

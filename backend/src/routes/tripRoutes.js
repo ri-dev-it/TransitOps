@@ -1,17 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const { authenticate } = require('../middleware/auth');
-const {
-  listTrips, getTrip, createTrip, dispatchTrip, completeTrip, cancelTrip,
-} = require('../controllers/tripController');
+const { getAllTrips, createTrip, dispatchTrip, completeTrip } = require('../controllers/tripController');
 
+// Apply auth middleware to all trip endpoints
 router.use(authenticate);
 
-router.get('/', listTrips);
-router.get('/:id', getTrip);
+// Standard CRUD
+router.get('/', getAllTrips);
 router.post('/', createTrip);
+
+// Lifecycle endpoints
 router.post('/:id/dispatch', dispatchTrip);
 router.post('/:id/complete', completeTrip);
-router.post('/:id/cancel', cancelTrip);
 
 module.exports = router;
