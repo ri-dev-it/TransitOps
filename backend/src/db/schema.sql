@@ -26,13 +26,13 @@ CREATE TYPE maintenance_status AS ENUM ('Open', 'Closed');
 -- Users & RBAC
 -- ------------------------------------------------------------
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(120) NOT NULL,
-    email VARCHAR(160) UNIQUE NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
-    role user_role NOT NULL DEFAULT 'driver',
-    region VARCHAR(80),
-    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  role VARCHAR(50) DEFAULT 'driver',
+  region VARCHAR(100),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- ------------------------------------------------------------
@@ -132,6 +132,7 @@ CREATE TABLE expenses (
     expense_date DATE NOT NULL DEFAULT CURRENT_DATE,
     created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
+
 
 -- ------------------------------------------------------------
 -- Indexes
